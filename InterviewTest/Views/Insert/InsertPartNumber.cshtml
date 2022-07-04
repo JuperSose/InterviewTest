@@ -1,0 +1,45 @@
+﻿@model InterviewTest.Models.PartNumber
+@{
+    ViewBag.Title = "Add New Part Number";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form action="/insert/insertpartnumber" method="post">
+    <div class="form-row">
+        <div class="form-group col-md-5">
+            <label for="PartNumber1">Part Number</label>
+            <input type="text" class="form-control" id="PartNumber1" name="PartNumber1" placeholder="Part Number">
+            @Html.ValidationMessageFor(temp => temp.PartNumber1)
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-5">
+            <label for="FKCustomer">Customer</label>
+            <select type="text" class="form-control" id="FKCustomer" name="FKCustomer">
+                <option value="">Please Select</option>
+                @foreach (var c in ViewBag.Customers)
+                {
+                    <option value="@c.PKCustomers">@c.Customer1</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(temp => temp.FKCustomer)
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="Available" name="Available" value="true">
+            <label class="form-check-label" for="Available">
+                Available
+            </label>
+        </div>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-success">Create</button>
+</form>
+
+@if (ViewBag.message != null)
+{
+    <script>alert('@ViewBag.message')</script>
+}

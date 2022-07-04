@@ -1,0 +1,42 @@
+﻿@model InterviewTest.Models.Customer
+@{
+    ViewBag.Title = "Add New Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form action="/insert/insertcustomer" method="post">
+    <div class="form-row">
+        <div class="form-group col-md-5">
+            <label for="Customer1">Customer Name</label>
+            <input type="text" class="form-control" id="Customer1" name="Customer1" placeholder="Customer Name">
+            @Html.ValidationMessageFor(temp => temp.Customer1)
+        </div>
+        <div class="form-group col-md-5">
+            <label for="Prefix">Prefix</label>
+            <input type="text" class="form-control" id="Prefix" name="Prefix" placeholder="Prefix">
+            @Html.ValidationMessageFor(temp => temp.Prefix)
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-5">
+            <label for="FKBuilding">Building</label>
+            <select type="text" class="form-control" id="FKBuilding" name="FKBuilding">
+                <option value="">Please Select</option>
+                @foreach (var b in ViewBag.Buildings)
+                {
+                    <option value="@b.PKBuilding">@b.Building1</option>
+                }
+            </select>
+            @Html.ValidationMessageFor(temp => temp.FKBuilding)
+        </div>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-success">Add</button>
+</form>
+
+@if (ViewBag.message != null)
+{
+    <script>alert('@ViewBag.message')</script>
+}

@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MaterialsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Buildings">
+          <Key>
+            <PropertyRef Name="PKBuilding" />
+          </Key>
+          <Property Name="PKBuilding" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Building" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="PKCustomers" />
+          </Key>
+          <Property Name="PKCustomers" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Customer" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Prefix" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="FKBuilding" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PartNumbers">
+          <Key>
+            <PropertyRef Name="PKPartNumber" />
+          </Key>
+          <Property Name="PKPartNumber" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PartNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FKCustomer" Type="int" Nullable="false" />
+          <Property Name="Available" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Customers_Buildings">
+          <End Role="Buildings" Type="Self.Buildings" Multiplicity="1" />
+          <End Role="Customers" Type="Self.Customers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Buildings">
+              <PropertyRef Name="PKBuilding" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="FKBuilding" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartNumbers_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+          <End Role="PartNumbers" Type="Self.PartNumbers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="PKCustomers" />
+            </Principal>
+            <Dependent Role="PartNumbers">
+              <PropertyRef Name="FKCustomer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="GetGridViewData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="MaterialsModelStoreContainer">
+          <EntitySet Name="Buildings" EntityType="Self.Buildings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PartNumbers" EntityType="Self.PartNumbers" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Customers_Buildings" Association="Self.FK_Customers_Buildings">
+            <End Role="Buildings" EntitySet="Buildings" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartNumbers_Customers" Association="Self.FK_PartNumbers_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="PartNumbers" EntitySet="PartNumbers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MaterialsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Building">
+          <Key>
+            <PropertyRef Name="PKBuilding" />
+          </Key>
+          <Property Name="PKBuilding" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Building1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK_Customers_Buildings" FromRole="Buildings" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="PKCustomers" />
+          </Key>
+          <Property Name="PKCustomers" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Customer1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prefix" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FKBuilding" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Building" Relationship="Self.FK_Customers_Buildings" FromRole="Customers" ToRole="Buildings" />
+          <NavigationProperty Name="PartNumbers" Relationship="Self.FK_PartNumbers_Customers" FromRole="Customers" ToRole="PartNumbers" />
+        </EntityType>
+        <EntityType Name="PartNumber">
+          <Key>
+            <PropertyRef Name="PKPartNumber" />
+          </Key>
+          <Property Name="PKPartNumber" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PartNumber1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FKCustomer" Type="Int32" Nullable="false" />
+          <Property Name="Available" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_PartNumbers_Customers" FromRole="PartNumbers" ToRole="Customers" />
+        </EntityType>
+        <Association Name="FK_Customers_Buildings">
+          <End Role="Buildings" Type="Self.Building" Multiplicity="1" />
+          <End Role="Customers" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Buildings">
+              <PropertyRef Name="PKBuilding" />
+            </Principal>
+            <Dependent Role="Customers">
+              <PropertyRef Name="FKBuilding" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PartNumbers_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
+          <End Role="PartNumbers" Type="Self.PartNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="PKCustomers" />
+            </Principal>
+            <Dependent Role="PartNumbers">
+              <PropertyRef Name="FKCustomer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MaterialsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Buildings" EntityType="Self.Building" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="PartNumbers" EntityType="Self.PartNumber" />
+          <AssociationSet Name="FK_Customers_Buildings" Association="Self.FK_Customers_Buildings">
+            <End Role="Buildings" EntitySet="Buildings" />
+            <End Role="Customers" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PartNumbers_Customers" Association="Self.FK_PartNumbers_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="PartNumbers" EntitySet="PartNumbers" />
+          </AssociationSet>
+          <FunctionImport Name="GetGridViewData" ReturnType="Collection(MaterialsModel.GetGridViewData_Result)" />
+        </EntityContainer>
+        <ComplexType Name="GetGridViewData_Result">
+          <Property Type="String" Name="PartNumber" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Customer" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Building" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="Available" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MaterialsModelStoreContainer" CdmEntityContainer="MaterialsEntities">
+          <EntitySetMapping Name="Buildings">
+            <EntityTypeMapping TypeName="MaterialsModel.Building">
+              <MappingFragment StoreEntitySet="Buildings">
+                <ScalarProperty Name="PKBuilding" ColumnName="PKBuilding" />
+                <ScalarProperty Name="Building1" ColumnName="Building" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="MaterialsModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="PKCustomers" ColumnName="PKCustomers" />
+                <ScalarProperty Name="Customer1" ColumnName="Customer" />
+                <ScalarProperty Name="Prefix" ColumnName="Prefix" />
+                <ScalarProperty Name="FKBuilding" ColumnName="FKBuilding" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartNumbers">
+            <EntityTypeMapping TypeName="MaterialsModel.PartNumber">
+              <MappingFragment StoreEntitySet="PartNumbers">
+                <ScalarProperty Name="PKPartNumber" ColumnName="PKPartNumber" />
+                <ScalarProperty Name="PartNumber1" ColumnName="PartNumber" />
+                <ScalarProperty Name="FKCustomer" ColumnName="FKCustomer" />
+                <ScalarProperty Name="Available" ColumnName="Available" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetGridViewData" FunctionName="MaterialsModel.Store.GetGridViewData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MaterialsModel.GetGridViewData_Result">
+                <ScalarProperty Name="PartNumber" ColumnName="PartNumber" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="Building" ColumnName="Building" />
+                <ScalarProperty Name="Available" ColumnName="Available" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
