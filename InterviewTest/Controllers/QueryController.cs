@@ -11,7 +11,7 @@ namespace InterviewTest.Controllers
     public class QueryController : Controller
     {
         /// <summary>
-        /// Get the data to show in the view, sort it and send it to the view of to export to CSV
+        /// Get the data to show in the view, sort it and send it to export to CSV
         /// </summary>
         /// <param name="search"></param>
         /// <param name="available"></param>
@@ -65,10 +65,9 @@ namespace InterviewTest.Controllers
                 else
                     dataSend = dataSend.OrderByDescending(temp => temp.Available).ToList();
             }
-            if (exportCSV)
-                return ExportToCSV(dataSend);
-            else
-                return View(dataSend);
+            TempData["dataSend"] = dataSend;
+
+            return View(dataSend);
         }
 
         /// <summary>
@@ -76,8 +75,10 @@ namespace InterviewTest.Controllers
         /// </summary>
         /// <param name="getGridViewData_Results"></param>
         /// <returns>the CSV file</returns>
-        public ActionResult ExportToCSV(List<GetGridViewData_Result> getGridViewData_Results)
+        [HttpPost]
+        public ActionResult ExportToCSV()
         {
+            List<GetGridViewData_Result> getGridViewData_Results = (List<GetGridViewData_Result>)TempData["dataSend"];
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("PartNumber,Customer,Building,Available");
             foreach (var d in getGridViewData_Results)
